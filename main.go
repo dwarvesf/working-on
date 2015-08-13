@@ -54,6 +54,10 @@ func addItem(c *gin.Context) {
 
 	// Parse token and message
 	var item Item
+
+	text := c.PostForm("text")
+	log.Infoln("Text: " + text)
+
 	if c.Bind(&item) != nil {
 		log.Fatal("Cannot parse data")
 	}
