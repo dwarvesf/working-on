@@ -49,11 +49,11 @@ func main() {
 //	+ Might use Chrome plugin
 //	+ ...
 // Token is secondary param to indicate the user
-func addItem(ctx *gin.Context) {
+func addItem(c *gin.Context) {
 
 	// Parse token and message
 	var item Item
-	if ctx.Bind(&item) != nil {
+	if c.Bind(&item) != nil {
 		log.Fatal("Cannot parse data")
 	}
 
@@ -66,15 +66,15 @@ func addItem(ctx *gin.Context) {
 		panic("Wrong format: " + item.Text)
 	}
 
-	context, err := context.NewContext()
+	ctx, err := NewContext()
 	if err != nil {
 		panic(err)
 	}
 
-	defer context.Close()
+	defer ctx.Close()
 
 	// Add Item to database
-	err = context.C("items").Insert(item)
+	err = ctx.C("items").Insert(item)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -99,12 +99,12 @@ func postDigest() {
 		os.Exit(1)
 	}
 
-	context, err := NewContext()
+	ctx, err := NewContext()
 	if err != nil {
 		panic(err)
 	}
 
-	defer context.Close()
+	defer ctx.Close()
 
 	// If count > 0, it means there is data to show
 	count := 0
@@ -123,7 +123,7 @@ func postDigest() {
 		var values string
 		var items []Item
 
-		err = context.C("items").Find(bson.M{
+		err = ctx.C("items").Find(bson.M{
 			"user_id":    user.Id,
 			"created_at": bson.M{"$gt": arrow.Yesterday()},
 		}).All(&items)
