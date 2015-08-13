@@ -22,6 +22,14 @@ const (
 
 var dbURL = os.Getenv("MONGOLAB_URI")
 
+type Item struct {
+	ID        bson.ObjectId `json:"id" bson:"_id"`
+	UserID    string        `json:"user_id" bson:"user_id"`
+	Name      string        `json:"user_name" bson:"user_name"`
+	Text      string        `json:"text" bson:"text"`
+	CreatedAt time.Time     `json:"created_at" bson:"created_at"`
+}
+
 func main() {
 
 	// Read configuration from file and env
@@ -32,36 +40,27 @@ func main() {
 	}
 
 	// Setup schedule jobs
-	digestJob := digest
+	digestJob := postDigest
 	scheduler.Every().Day().At("09:30").Run(digestJob)
 
 	// Prepare router
 	router := gin.New()
 	router.Use(ginrus.Ginrus(log.StandardLogger(), time.RFC3339, true))
-	router.POST("/d", addDoneItem)
-	router.POST("/l", login)
+	router.POST("/on", addItem)
 
 	// Start server
 	router.Run(":" + port)
 }
 
 func getDBConnection() *mgo.Database {
-
 	session, err := mgo.Dial(dbURL)
+
 	if err != nil {
 		panic(err)
 	}
 
 	defer session.Clone()
 	return session.DB(dbName)
-}
-
-type Item struct {
-	ID        bson.ObjectId `json:"id" bson:"_id"`
-	UserID    string        `json:"user_id" bson:"user_id"`
-	Name      string        `json:"user_name" bson:"user_name"`
-	Text      string        `json:"text" bson:"text"`
-	CreatedAt time.Time     `json:"created_at" bson:"created_at"`
 }
 
 // Message will be passed to server with '-' prefix via various way
@@ -71,7 +70,7 @@ type Item struct {
 //	+ Might use Chrome plugin
 //	+ ...
 // Token is secondary param to indicate the user
-func addDoneItem(ctx *gin.Context) {
+func addItem(ctx *gin.Context) {
 
 	// Parse token and message
 	var item Item
@@ -100,20 +99,8 @@ func addDoneItem(ctx *gin.Context) {
 	}
 }
 
-// Log user in and return access token
-func login(c *gin.Context) {
-
-	// Retrieve username and password
-
-	// Try to get some info from Slack
-
-	// Store access token for user
-
-	// Return access token for later usage
-}
-
 // Post summary to Slack channel
-func digest() {
+func postDigest() {
 
 	channel := "#general"
 	botToken := os.Getenv("BOT_TOKEN")
@@ -150,7 +137,6 @@ func digest() {
 		var values string
 		var items []Item
 		err = itemCollection.Find(bson.M{"user_id": user.Id, "created_at": bson.M{"$gt": arrow.Yesterday()}}).All(&items)
-
 		if err != nil {
 			log.Fatal("Cannot query done items.")
 			os.Exit(1)
