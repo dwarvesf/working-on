@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"strings"
 	"time"
@@ -61,6 +62,7 @@ func addItem(ctx *gin.Context) {
 		log.Fatal("Cannot parse data")
 	}
 
+	fmt.Printf("Message: %v\n", item)
 	item.ID = bson.NewObjectId()
 	item.CreatedAt = time.Now()
 
