@@ -6,7 +6,6 @@ import (
 	"strings"
 	"time"
 
-	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 
 	log "github.com/Sirupsen/logrus"
@@ -15,10 +14,6 @@ import (
 	"github.com/gin-gonic/contrib/ginrus"
 	"github.com/gin-gonic/gin"
 	"github.com/nlopes/slack"
-)
-
-const (
-	dbName string = "working"
 )
 
 type Item struct {
@@ -71,23 +66,15 @@ func addItem(ctx *gin.Context) {
 		panic("Wrong format: " + item.Text)
 	}
 
-	dbURL := os.Getenv("MONGOLAB_URI")
-	if dbURL == "" {
-		log.Fatal("No connection string provided")
-		os.Exit(1)
-	}
-
-	session, err := mgo.Dial(dbURL)
-
+	context, err := NewContext()
 	if err != nil {
 		panic(err)
 	}
 
-	defer session.Close()
+	defer context.Close()
 
 	// Add Item to database
-	c := session.DB(dbName).C("items")
-	err = c.Insert(item)
+	err = context.C("items").Insert(item)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -112,21 +99,12 @@ func postDigest() {
 		os.Exit(1)
 	}
 
-	dbURL := os.Getenv("MONGOLAB_URI")
-	if dbURL == "" {
-		log.Fatal("No connection string provided")
-		os.Exit(1)
-	}
-
-	session, err := mgo.Dial(dbURL)
-
+	context, err := NewContext()
 	if err != nil {
 		panic(err)
 	}
 
-	defer session.Close()
-
-	itemCollection := session.DB(dbName).C("items")
+	defer context.Close()
 
 	// If count > 0, it means there is data to show
 	count := 0
@@ -144,7 +122,12 @@ func postDigest() {
 		// Query done items from Database
 		var values string
 		var items []Item
-		err = itemCollection.Find(bson.M{"user_id": user.Id, "created_at": bson.M{"$gt": arrow.Yesterday()}}).All(&items)
+
+		err = context.C("items").Find(bson.M{
+			"user_id":    user.Id,
+			"created_at": bson.M{"$gt": arrow.Yesterday()},
+		}).All(&items)
+
 		if err != nil {
 			log.Fatal("Cannot query done items.")
 			os.Exit(1)
