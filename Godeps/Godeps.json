@@ -8,6 +8,10 @@
 			"Rev": "55eb11d21d2a31a3cc93838241d04800f52e823d"
 		},
 		{
+			"ImportPath": "github.com/bmuller/arrow/lib",
+			"Rev": "57b28416c629f234bd2291d3ba7b19b9a064fd37"
+		},
+		{
 			"ImportPath": "github.com/carlescere/scheduler",
 			"Comment": "0.1-4-gd9bb642",
 			"Rev": "d9bb64293c28deaa1fa4224768de1a6e316a40eb"
@@ -30,7 +34,15 @@
 			"Rev": "40e4aedc8fabf8c23e040057540867186712faa5"
 		},
 		{
+			"ImportPath": "github.com/nlopes/slack",
+			"Rev": "1da32686c2e7143de764729a1d52732047f7aa84"
+		},
+		{
 			"ImportPath": "golang.org/x/net/context",
+			"Rev": "a8c61998a557a37435f719980da368469c10bfed"
+		},
+		{
+			"ImportPath": "golang.org/x/net/websocket",
 			"Rev": "a8c61998a557a37435f719980da368469c10bfed"
 		},
 		{
