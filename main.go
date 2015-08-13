@@ -66,7 +66,7 @@ func addItem(ctx *gin.Context) {
 		panic("Wrong format: " + item.Text)
 	}
 
-	context, err := NewContext()
+	context, err := context.NewContext()
 	if err != nil {
 		panic(err)
 	}
