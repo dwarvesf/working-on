@@ -11,6 +11,7 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/bmuller/arrow/lib"
 	"github.com/carlescere/scheduler"
+	"github.com/dwarvesf/working-on/db"
 	"github.com/gin-gonic/contrib/ginrus"
 	"github.com/gin-gonic/gin"
 	"github.com/nlopes/slack"
@@ -66,7 +67,7 @@ func addItem(c *gin.Context) {
 		panic("Wrong format: " + item.Text)
 	}
 
-	ctx, err := NewContext()
+	ctx, err := db.NewContext()
 	if err != nil {
 		panic(err)
 	}
@@ -99,7 +100,7 @@ func postDigest() {
 		os.Exit(1)
 	}
 
-	ctx, err := NewContext()
+	ctx, err := db.NewContext()
 	if err != nil {
 		panic(err)
 	}
