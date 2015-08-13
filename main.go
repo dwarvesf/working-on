@@ -20,8 +20,6 @@ const (
 	dbName string = "working"
 )
 
-var dbURL = os.Getenv("MONGOLAB_URI")
-
 type Item struct {
 	ID        bson.ObjectId `json:"id" bson:"_id"`
 	UserID    string        `json:"user_id" bson:"user_id"`
@@ -34,10 +32,6 @@ func main() {
 
 	// Read configuration from file and env
 	port := os.Getenv("PORT")
-	if dbURL == "" {
-		log.Fatal("No connection string provided")
-		os.Exit(1)
-	}
 
 	// Setup schedule jobs
 	digestJob := postDigest
@@ -50,17 +44,6 @@ func main() {
 
 	// Start server
 	router.Run(":" + port)
-}
-
-func getDBConnection() *mgo.Database {
-	session, err := mgo.Dial(dbURL)
-
-	if err != nil {
-		panic(err)
-	}
-
-	defer session.Clone()
-	return session.DB(dbName)
 }
 
 // Message will be passed to server with '-' prefix via various way
@@ -78,6 +61,7 @@ func addItem(ctx *gin.Context) {
 		log.Fatal("Cannot parse data")
 	}
 
+	item.ID = bson.NewObjectId()
 	item.CreatedAt = time.Now()
 
 	message := strings.TrimSpace(item.Text)
@@ -85,13 +69,21 @@ func addItem(ctx *gin.Context) {
 		panic("Wrong format: " + item.Text)
 	}
 
-	// Add Item to database
+	dbURL := os.Getenv("MONGOLAB_URI")
+	if dbURL == "" {
+		log.Fatal("No connection string provided")
+		os.Exit(1)
+	}
+
 	session, err := mgo.Dial(dbURL)
+
 	if err != nil {
 		panic(err)
 	}
+
 	defer session.Close()
 
+	// Add Item to database
 	c := session.DB(dbName).C("items")
 	err = c.Insert(item)
 	if err != nil {
@@ -118,7 +110,21 @@ func postDigest() {
 		os.Exit(1)
 	}
 
-	itemCollection := getDBConnection().C("items")
+	dbURL := os.Getenv("MONGOLAB_URI")
+	if dbURL == "" {
+		log.Fatal("No connection string provided")
+		os.Exit(1)
+	}
+
+	session, err := mgo.Dial(dbURL)
+
+	if err != nil {
+		panic(err)
+	}
+
+	defer session.Close()
+
+	itemCollection := session.DB(dbName).C("items")
 
 	// If count > 0, it means there is data to show
 	count := 0
