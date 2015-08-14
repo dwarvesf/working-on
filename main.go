@@ -41,6 +41,8 @@ func main() {
 
 	// Start server
 	router.Run(":" + port)
+
+	// postDigest()
 }
 
 // Message will be passed to server with '-' prefix via various way
@@ -88,7 +90,7 @@ func addItem(c *gin.Context) {
 // Post summary to Slack channel
 func postDigest() {
 
-	channel := "#general"
+	channel := "#support"
 	botToken := os.Getenv("BOT_TOKEN")
 
 	if botToken == "" {
@@ -111,11 +113,16 @@ func postDigest() {
 
 	defer ctx.Close()
 
+	log.Info("Preparing data")
 	// If count > 0, it means there is data to show
 	count := 0
 	title := "Yesterday I learnt"
 	params := slack.PostMessageParameters{}
 	fields := []slack.AttachmentField{}
+
+	log.Info("Yesterday: " + arrow.Yesterday())
+	log.Info("Arrow Now: " + arrow.Now())
+	log.Info("Now: " + time.Now())
 
 	// Prepare attachment of done items
 	for _, user := range users {
@@ -123,6 +130,8 @@ func postDigest() {
 		if user.IsBot || user.Deleted {
 			continue
 		}
+
+		log.Info("Process user: " + user.Name)
 
 		// Query done items from Database
 		var values string
@@ -142,6 +151,8 @@ func postDigest() {
 			count = count + 1
 		}
 
+		log.Info(len(items))
+
 		for _, item := range items {
 			values = values + item.Text + "\n"
 		}
@@ -160,6 +171,9 @@ func postDigest() {
 			Fields: fields,
 		},
 	}
+
+	params.IconURL = "http://i.imgur.com/fLcxkel.png"
+	params.Username = "oshin"
 
 	if count > 0 {
 		s.PostMessage(channel, title, params)
