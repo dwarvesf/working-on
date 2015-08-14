@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"strings"
 	"time"
 
 	"gopkg.in/mgo.v2/bson"
@@ -64,14 +63,9 @@ func addItem(c *gin.Context) {
 		log.Fatal("Cannot parse data")
 	}
 
-	fmt.Printf("Message: %v\n", item)
 	item.ID = bson.NewObjectId()
 	item.CreatedAt = time.Now()
-
-	message := strings.TrimSpace(item.Text)
-	if !strings.HasPrefix(message, "-") {
-		panic("Wrong format: " + item.Text)
-	}
+	fmt.Printf("Message: %v\n", item)
 
 	ctx, err := db.NewContext()
 	if err != nil {
