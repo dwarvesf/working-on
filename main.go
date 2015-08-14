@@ -120,9 +120,9 @@ func postDigest() {
 	params := slack.PostMessageParameters{}
 	fields := []slack.AttachmentField{}
 
-	log.Info("Yesterday: " + arrow.Yesterday())
-	log.Info("Arrow Now: " + arrow.Now())
-	log.Info("Now: " + time.Now())
+	log.Info(arrow.Yesterday())
+	log.Info(arrow.Now())
+	log.Info(time.Now())
 
 	// Prepare attachment of done items
 	for _, user := range users {
