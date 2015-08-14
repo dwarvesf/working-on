@@ -57,14 +57,14 @@ func addItem(c *gin.Context) {
 	var item Item
 
 	text := c.PostForm("text")
-	log.Infoln("Text: " + text)
-
-	if c.Bind(&item) != nil {
-		log.Fatal("Cannot parse data")
-	}
+	userID := c.PostForm("user_id")
+	userName := c.PostForm("user_name")
 
 	item.ID = bson.NewObjectId()
 	item.CreatedAt = time.Now()
+	item.Name = userName
+	item.UserID = userID
+	item.Text = text
 	fmt.Printf("Message: %v\n", item)
 
 	ctx, err := db.NewContext()
