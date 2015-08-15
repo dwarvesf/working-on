@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"time"
 
@@ -65,7 +64,6 @@ func addItem(c *gin.Context) {
 	item.Name = userName
 	item.UserID = userID
 	item.Text = text
-	fmt.Printf("Message: %v\n", item)
 
 	ctx, err := db.NewContext()
 	if err != nil {
@@ -79,6 +77,19 @@ func addItem(c *gin.Context) {
 	if err != nil {
 		log.Fatalln(err)
 	}
+
+	// Repost to the target channel
+	channel := "#support"
+	botToken := os.Getenv("BOT_TOKEN")
+
+	if botToken == "" {
+		log.Fatal("No token provided")
+		os.Exit(1)
+	}
+
+	s := slack.New(botToken)
+	title := "*" + userName + "* is doing: " + text
+	s.PostMessage(channel, title, slack.PostMessageParameters{})
 }
 
 // Post summary to Slack channel
@@ -110,13 +121,12 @@ func postDigest() {
 	log.Info("Preparing data")
 	// If count > 0, it means there is data to show
 	count := 0
-	title := "Yesterday I learnt"
+	title := ":cute: Yesterday I did"
 	params := slack.PostMessageParameters{}
 	fields := []slack.AttachmentField{}
 
-	log.Info(arrow.Yesterday())
-	log.Info(arrow.Now())
-	log.Info(time.Now())
+	yesterday := arrow.Yesterday().UTC()
+	toDate := time.Date(yesterday.Year(), yesterday.Month(), yesterday.Day(), 0, 0, 0, 0, time.UTC)
 
 	// Prepare attachment of done items
 	for _, user := range users {
@@ -125,15 +135,16 @@ func postDigest() {
 			continue
 		}
 
-		log.Info("Process user: " + user.Name)
+		log.Info("Process user: " + user.Name + " - " + user.Id)
 
 		// Query done items from Database
 		var values string
 		var items []Item
 
-		err = ctx.C("items").Find(bson.M{
-			"user_id":    user.Id,
-			"created_at": bson.M{"$gt": arrow.Yesterday()},
+		err = ctx.C("items").Find(bson.M{"$and": []bson.M{
+			bson.M{"user_id": user.Id},
+			bson.M{"created_at": bson.M{"$gt": toDate}},
+		},
 		}).All(&items)
 
 		if err != nil {
@@ -141,22 +152,21 @@ func postDigest() {
 			os.Exit(1)
 		}
 
-		if len(items) > 0 {
-			count = count + 1
-		}
-
-		log.Info(len(items))
-
 		for _, item := range items {
 			values = values + item.Text + "\n"
 		}
 
-		field := slack.AttachmentField{
-			Title: user.Name,
-			Value: values,
-		}
+		if len(items) > 0 {
+			log.Info(len(items))
 
-		fields = append(fields, field)
+			count = count + 1
+			field := slack.AttachmentField{
+				Title: user.Name,
+				Value: values,
+			}
+
+			fields = append(fields, field)
+		}
 	}
 
 	params.Attachments = []slack.Attachment{
