@@ -8,6 +8,7 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/bmuller/arrow/lib"
+	"github.com/brandfolder/gin-gorelic"
 	"github.com/carlescere/scheduler"
 	"github.com/dwarvesf/working-on/db"
 	"github.com/gin-gonic/contrib/ginrus"
@@ -27,6 +28,7 @@ func main() {
 
 	// Read configuration from file and env
 	port := os.Getenv("PORT")
+	gorelic.InitNewrelicAgent(os.Getenv("NEW_RELIC_LICENSE_KEY"), "dwarvesf", true)
 
 	// Setup schedule jobs
 	digestJob := postDigest
@@ -34,6 +36,7 @@ func main() {
 
 	// Prepare router
 	router := gin.New()
+	router.Use(gorelic.Handler)
 	router.Use(ginrus.Ginrus(log.StandardLogger(), time.RFC3339, true))
 	router.LoadHTMLGlob("templates/*.tmpl.html")
 	router.Static("/static", "static")

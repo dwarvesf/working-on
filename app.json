@@ -5,7 +5,8 @@
 	"logo": "https://working.herokuapp.com/icon.png",
 	"keywords": ["go", "gin", "toolkit", "productivity", "working"],
 	"addons": [
-    	"mongolab:sandbox"
+    	"mongolab:sandbox",
+    	"newrelic:wayne"
   	],
   	"env": {
 	    "BOT_TOKEN": {

@@ -41,4 +41,5 @@ _Not yet supported_
 - [ ] Support private channel
 - [ ] One click installer for backend
 - [ ] Support multi Slack teams
+- [ ] Restructure
 

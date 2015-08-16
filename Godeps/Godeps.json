@@ -12,6 +12,10 @@
 			"Rev": "57b28416c629f234bd2291d3ba7b19b9a064fd37"
 		},
 		{
+			"ImportPath": "github.com/brandfolder/gin-gorelic",
+			"Rev": "b3200fd6d4c7c434fd4d4d7ecb39a3c43aa8253c"
+		},
+		{
 			"ImportPath": "github.com/carlescere/scheduler",
 			"Comment": "0.1-4-gd9bb642",
 			"Rev": "d9bb64293c28deaa1fa4224768de1a6e316a40eb"
@@ -36,6 +40,19 @@
 		{
 			"ImportPath": "github.com/nlopes/slack",
 			"Rev": "1da32686c2e7143de764729a1d52732047f7aa84"
+		},
+		{
+			"ImportPath": "github.com/yvasiyarov/go-metrics",
+			"Rev": "c25f46c4b94079672242ec48a545e7ca9ebe3aec"
+		},
+		{
+			"ImportPath": "github.com/yvasiyarov/gorelic",
+			"Comment": "v0.0.6-14-gb355764",
+			"Rev": "b355764846b999a8a73fc426304f669de56a1a6d"
+		},
+		{
+			"ImportPath": "github.com/yvasiyarov/newrelic_platform_go",
+			"Rev": "13d5af9721f4455a501db543c93827447089bab3"
 		},
 		{
 			"ImportPath": "golang.org/x/net/context",
