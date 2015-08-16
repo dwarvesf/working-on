@@ -1,0 +1,28 @@
+{
+	"name": "Working On app",
+	"description": "Simple toolkit to help your team do remote scrum catchup",
+	"repository": "https://github.com/dwarvesf/working-on",
+	"logo": "https://working.herokuapp.com/icon.png",
+	"keywords": ["go", "gin", "toolkit", "productivity", "working"],
+	"addons": [
+    	"mongolab:sandbox"
+  	],
+  	"env": {
+	    "BOT_TOKEN": {
+	      "description": "A secret key for verifying the slackbot",
+	      "value": ""
+	    },
+	    "DB_NAME": {
+	      "description": "Name of database, stay behind the slash of MONGOLAB_URI",
+	      "value": ""
+	    },
+	    "SLASH_TOKEN": {
+	    	"description": "A token for the slash command",
+	    	"value": ""
+	    },
+	    "GIN_MODE": {
+	    	"description": "Running mode of gin",
+	    	"value": "release"
+	    }
+    },
+}

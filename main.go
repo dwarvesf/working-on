@@ -35,12 +35,12 @@ func main() {
 	// Prepare router
 	router := gin.New()
 	router.Use(ginrus.Ginrus(log.StandardLogger(), time.RFC3339, true))
+	router.LoadHTMLGlob("templates/*.tmpl.html")
+	router.Static("/static", "static")
 	router.POST("/on", addItem)
 
 	// Start server
 	router.Run(":" + port)
-
-	// postDigest()
 }
 
 // Message will be passed to server with '-' prefix via various way
@@ -79,7 +79,7 @@ func addItem(c *gin.Context) {
 	}
 
 	// Repost to the target channel
-	channel := "#support"
+	channel := "#mining"
 	botToken := os.Getenv("BOT_TOKEN")
 
 	if botToken == "" {
@@ -89,7 +89,11 @@ func addItem(c *gin.Context) {
 
 	s := slack.New(botToken)
 	title := "*" + userName + "* is doing: " + text
-	s.PostMessage(channel, title, slack.PostMessageParameters{})
+
+	params := slack.PostMessageParameters{}
+	params.IconURL = "http://i.imgur.com/fLcxkel.png"
+	params.Username = "oshin"
+	s.PostMessage(channel, title, params)
 }
 
 // Post summary to Slack channel

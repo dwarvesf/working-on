@@ -1,6 +1,8 @@
 # working-on
 Working On app that help the team improve the productivity
 
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/dwarvesf/working-on)
+
 ## Setup
 
 ### Digest for public channel
