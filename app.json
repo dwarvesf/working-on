@@ -2,7 +2,7 @@
 	"name": "Working On app",
 	"description": "Simple toolkit that help your team do remote scrum meeting",
 	"repository": "https://github.com/dwarvesf/working-on",
-	"logo": "https://working.herokuapp.com/icon.png",
+	"logo": "https://working.herokuapp.com/static/icon.png",
 	"keywords": ["go", "gin", "toolkit", "productivity", "working"],
 	"addons": [
     	"mongolab:sandbox",

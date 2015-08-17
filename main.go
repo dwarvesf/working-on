@@ -93,7 +93,7 @@ func addItem(c *gin.Context) {
 	}
 
 	s := slack.New(botToken)
-	title := "*" + userName + "* is doing: " + text
+	title := "*" + userName + "* is working on: " + text
 
 	params := slack.PostMessageParameters{}
 	params.IconURL = "http://i.imgur.com/fLcxkel.png"
@@ -130,7 +130,7 @@ func postDigest() {
 	log.Info("Preparing data")
 	// If count > 0, it means there is data to show
 	count := 0
-	title := ":cute: Yesterday I did"
+	title := "Yesterday I did :len:"
 	params := slack.PostMessageParameters{}
 	fields := []slack.AttachmentField{}
 
@@ -144,7 +144,7 @@ func postDigest() {
 			continue
 		}
 
-		log.Info("Process user: " + user.Name + " - " + user.Id)
+		// log.Info("Process user: " + user.Name + " - " + user.Id)
 
 		// Query done items from Database
 		var values string
