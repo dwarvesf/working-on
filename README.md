@@ -1,9 +1,15 @@
 # working-on
-Working On is a productivity tool that integrated with Slack, the most popular team collaboration platform nowadays. At Dwarves Foundation, teamwork is about *Synchronisation* between the team members, which means you need to know and align with the team goal, and all of your activities need to be known by other members. That will raise the awareness to the next level and keep the team synced.
+Working On is a productivity tool that integrated with Slack, the most popular team collaboration platform nowadays. At Dwarves Foundation, teamwork is about [*Synchronisation*](http://tieubao.me/writing/2014/12/05/it-is-hard-to-become-a-team-member/) between the team members, which means you need to know and align with the team goal, and all of your activities need to be known by other members. That will raise the awareness to the next level and keep the team synced.
 
 We had successfully apply it to our team and we want to share it to you. Too simple to setup via Heroku.
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/dwarvesf/working-on)
+
+## How to use
+
+- When you start to do something, go to Slack and use slash command `/working <what are you going to do>` to let your teammates know about it. (The geek can use `cli`)
+- On the next day morning, the bot will make the digest and post it to the digest channel, so that everyone else can have a full view, even the manager or leader. It's also make others motivated by seeing what you've achieved.
+- All the team members should follow the rule for the team sake.
 
 ## Setup
 
