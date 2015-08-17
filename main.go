@@ -39,7 +39,8 @@ func main() {
 	router := gin.New()
 	router.Use(gorelic.Handler)
 	router.Use(ginrus.Ginrus(log.StandardLogger(), time.RFC3339, true))
-	router.LoadHTMLGlob("templates/*.tmpl.html")
+
+	// router.LoadHTMLGlob("templates/*.tmpl.html")
 	router.Static("/static", "static")
 	router.POST("/on", addItem)
 
