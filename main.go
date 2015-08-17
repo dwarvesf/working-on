@@ -28,11 +28,12 @@ func main() {
 
 	// Read configuration from file and env
 	port := os.Getenv("PORT")
+	digestTime := os.Getenv("DIGEST_TIME")
 	gorelic.InitNewrelicAgent(os.Getenv("NEW_RELIC_LICENSE_KEY"), "dwarvesf", true)
 
 	// Setup schedule jobs
 	digestJob := postDigest
-	scheduler.Every().Day().At("09:30").Run(digestJob)
+	scheduler.Every().Day().At(digestTime).Run(digestJob)
 
 	// Prepare router
 	router := gin.New()

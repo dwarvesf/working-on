@@ -13,10 +13,6 @@
 	      "description": "A secret key for verifying the slackbot",
 	      "value": ""
 	    },
-	    "DB_NAME": {
-	      "description": "Name of database, stay behind the slash of MONGOLAB_URI",
-	      "value": ""
-	    },
 	    "SLASH_TOKEN": {
 	    	"description": "A token for the slash command",
 	    	"value": ""
@@ -24,6 +20,14 @@
 	    "GIN_MODE": {
 	    	"description": "Running mode of gin",
 	    	"value": "release"
+	    },
+	    "DIGEST_TIME": {
+	    	"description": "Time to post the team digest",
+	    	"value": "02:30"	
+	    },
+	   	"DB_NAME": {
+	      "description": "Name of database, stay behind the slash of MONGOLAB_URI",
+	      "value": ""
 	    }
     },
 }
