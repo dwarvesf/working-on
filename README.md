@@ -1,7 +1,7 @@
 # working-on
 Working On is a productivity tool that integrated with Slack, the most popular team collaboration platform nowadays. At Dwarves Foundation, teamwork is about *Synchronisation* between the team members, which means you need to know and align with the team goal, and all of your activities need to be known by other members. That will raise the awareness to the next level and keep the team synced.
 
-We had successfully apply it to our team. Too simple to setup via Heroku.
+We had successfully apply it to our team and we want to share it to you. Too simple to setup via Heroku.
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/dwarvesf/working-on)
 
@@ -22,6 +22,8 @@ We had successfully apply it to our team. Too simple to setup via Heroku.
     - Add digest channel as env `DIGEST_CHANNEL`. Mine is "#general"
     - Add working channel as env `WORKING_CHANNEL`. Mine is "#working"
 
+    ![Heroku Env](/static/heroku-env.png)
+
 * Add Bot
 
     ![Add bot](/static/bot.png)
@@ -38,7 +40,7 @@ We had successfully apply it to our team. Too simple to setup via Heroku.
     - Retrieve the Token. Set env `SLASH_TOKEN`
     - Add url `<your-host>/on`. For Heroku, it is `http://xyz.herokuapp.com/on`
 
-* Setup NewRelic (to keep your server awake)
+* Setup NewRelic (to keep your Heroku server awake)
 
     - Add NewRelic add-on for Heroku or you can register one for yourself
     - Set env `NEW_RELIC_LICENSE_KEY` and `NEW_RELIC_LOG`
@@ -46,15 +48,11 @@ We had successfully apply it to our team. Too simple to setup via Heroku.
 
     ![NewRelic](/static/newrelic.png)
 
-Screenshots
-
-![Heroku Env](/static/heroku-env.png)
-
 ### Configure cli (for geek)
 
-    - Clone project [working-on-cli](https://github.com/dwarvesf/working-on-cli)
-    - Access https://api.slack.com/web to get own your token.
-    - Run ./setup.sh --token `<token>` --domain `<domain>` will create bin file and config file for you.
+- Clone project [working-on-cli](https://github.com/dwarvesf/working-on-cli)
+- Access https://api.slack.com/web to get own your token.
+- Run ./setup.sh --token `<token>` --domain `<domain>` will create bin file and config file for you.
 
 ### Digest for project channel
 
@@ -63,7 +61,7 @@ _Not yet supported_
 ## Roadmap
 
 - [ ] Support private channel
-- [ ] One click installer for backend
+- [x] One click installer for backend
 - [ ] Support multi Slack teams
 - [ ] Restructure
 
