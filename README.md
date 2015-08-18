@@ -71,3 +71,7 @@ _Not yet supported_
 - [ ] Support multi Slack teams
 - [ ] Restructure
 
+## Contribution
+
+Team collaboration and synchronization are always the main factors of the good team. We want to build a simple tool that can integrate with Slack, help the team increase productivity and also fit for remote team. Feel free to contribute any idea or pull request to make it better.
+

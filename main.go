@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"strings"
 	"time"
 
 	"gopkg.in/mgo.v2/bson"
@@ -61,6 +62,13 @@ func addItem(c *gin.Context) {
 	var item Item
 
 	text := c.PostForm("text")
+	text = strings.Trim(text)
+
+	if text == "" {
+		log.Fatalln("Message is nil")
+		return
+	}
+
 	userID := c.PostForm("user_id")
 	userName := c.PostForm("user_name")
 
@@ -84,7 +92,7 @@ func addItem(c *gin.Context) {
 	}
 
 	// Repost to the target channel
-	channel := "#mining"
+	channel := os.Getenv("WORKING_CHANNEL")
 	botToken := os.Getenv("BOT_TOKEN")
 
 	if botToken == "" {
@@ -94,7 +102,7 @@ func addItem(c *gin.Context) {
 
 	s := slack.New(botToken)
 	// <@U024BE7LH|bob>
-	title := "*" + userName + "* is working on: " + text
+	title := "*" + userName + "* is working on: :len: " + text
 
 	params := slack.PostMessageParameters{}
 	params.IconURL = "http://i.imgur.com/fLcxkel.png"
@@ -105,7 +113,7 @@ func addItem(c *gin.Context) {
 // Post summary to Slack channel
 func postDigest() {
 
-	channel := "#support"
+	channel := os.Getenv("DIGEST_CHANNEL")
 	botToken := os.Getenv("BOT_TOKEN")
 
 	if botToken == "" {
