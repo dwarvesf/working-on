@@ -62,7 +62,7 @@ func addItem(c *gin.Context) {
 	var item Item
 
 	text := c.PostForm("text")
-	text = strings.Trim(text)
+	text = strings.TrimSpace(text)
 
 	if text == "" {
 		log.Fatalln("Message is nil")
