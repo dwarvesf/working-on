@@ -102,7 +102,7 @@ func addItem(c *gin.Context) {
 
 	s := slack.New(botToken)
 	// <@U024BE7LH|bob>
-	title := "*" + userName + "* is working on: :len: " + text
+	title := "*" + userName + "* is working on: " + text
 
 	params := slack.PostMessageParameters{}
 	params.IconURL = "http://i.imgur.com/fLcxkel.png"

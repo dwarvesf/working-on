@@ -11,7 +11,7 @@ We had successfully apply it to our team and we want to share it to you. Too sim
 - On the next day morning, the bot will make the digest and post it to the digest channel, so that everyone else can have a full view, even the manager or leader. It's also make others motivated by seeing what you've achieved.
 - All the team members should follow the rule for the team sake.
 
-What does it look like
+*What does it look like*
 
 ![Sample](/static/sample.png)
 
@@ -27,8 +27,8 @@ What does it look like
     - For Heroku: Add NewRelic add-on.
 
     - Set env `MONGOLAB_URI` which is database url.
-    - Set env `DB_NAME` which is the name of the database
-    - Add digest time as env `DIGEST_TIME`. Mine is "02:30"
+    - Set env `DB_NAME` which is the name of the database, the last part of *MONGOLAB_URI*
+    - Add digest time as env `DIGEST_TIME` in UTC +0. Mine is "02:30", which means we will have a digest message on 9:30 AM GMT+7
     - Add digest channel as env `DIGEST_CHANNEL`. Mine is "#general"
     - Add working channel as env `WORKING_CHANNEL`. Mine is "#working"
 
