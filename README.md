@@ -11,6 +11,10 @@ We had successfully apply it to our team and we want to share it to you. Too sim
 - On the next day morning, the bot will make the digest and post it to the digest channel, so that everyone else can have a full view, even the manager or leader. It's also make others motivated by seeing what you've achieved.
 - All the team members should follow the rule for the team sake.
 
+What does it look like
+
+![Sample](/static/sample.png)
+
 ## Setup
 
 ### Digest for public channel
