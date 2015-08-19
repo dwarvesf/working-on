@@ -1,7 +1,7 @@
 # working-on
 Working On is a productivity tool that integrated with Slack, the most popular team collaboration platform nowadays. At Dwarves Foundation, teamwork is about [*Synchronisation*](http://tieubao.me/writing/2014/12/05/it-is-hard-to-become-a-team-member/) between the team members, which means you need to know and align with the team goal, and all of your activities need to be known by other members. That will raise the awareness to the next level and keep the team synced.
 
-We had successfully apply it to our team and we want to share it to you. Too simple to setup via Heroku.
+We had successfully applied it to our team and we want to share it to you. Too simple to setup via Heroku.
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/dwarvesf/working-on)
 
@@ -29,12 +29,12 @@ We had successfully apply it to our team and we want to share it to you. Too sim
     - Set env `MONGOLAB_URI` which is database url.
     - Set env `DB_NAME` which is the name of the database, the last part of *MONGOLAB_URI*
     - Add digest time as env `DIGEST_TIME` in UTC +0. Mine is "02:30", which means we will have a digest message on 9:30 AM GMT+7
-    - Add digest channel as env `DIGEST_CHANNEL`. Mine is "#general"
-    - Add working channel as env `WORKING_CHANNEL`. Mine is "#working"
+    - Add digest channel as env `DIGEST_CHANNEL`. Mine is *"#general"*
+    - Add working channel as env `WORKING_CHANNEL`. Mine is *"#working"*
 
     ![Heroku Env](/static/heroku-env.png)
 
-* Add Bot
+* Add Bot Integration
 
     ![Add bot](/static/bot.png)
 
@@ -42,7 +42,7 @@ We had successfully apply it to our team and we want to share it to you. Too sim
     - Retrieve API Token. Set env `BOT_TOKEN`
     - Back to Slack and invite the bot to the channel.
 
-* Add Slash Command
+* Add Slash Command Integration
 
     ![Add slash command](/static/slash.png)
 

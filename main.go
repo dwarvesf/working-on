@@ -139,7 +139,7 @@ func postDigest() {
 	log.Info("Preparing data")
 	// If count > 0, it means there is data to show
 	count := 0
-	title := "Yesterday I did :len:"
+	title := " >> Yesterday I did: "
 	params := slack.PostMessageParameters{}
 	fields := []slack.AttachmentField{}
 
@@ -171,15 +171,15 @@ func postDigest() {
 		}
 
 		for _, item := range items {
-			values = values + item.Text + "\n"
+			values = values + " - " + item.Text + "\n"
 		}
 
+		// <@U024BE7LH|bob>
 		if len(items) > 0 {
-			log.Info(len(items))
 
 			count = count + 1
 			field := slack.AttachmentField{
-				Title: user.Name,
+				Title: "<@" + user.Id + "|" + user.Name + ">",
 				Value: values,
 			}
 
