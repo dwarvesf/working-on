@@ -171,7 +171,7 @@ func postDigest() {
 		}
 
 		for _, item := range items {
-			values = values + " - " + item.Text + "\n"
+			values = values + " + " + item.Text + "\n\t"
 		}
 
 		// <@U024BE7LH|bob>
@@ -179,7 +179,7 @@ func postDigest() {
 
 			count = count + 1
 			field := slack.AttachmentField{
-				Title: "<@" + user.Id + "|" + user.Name + ">",
+				Title: "@" + user.Name,
 				Value: values,
 			}
 
