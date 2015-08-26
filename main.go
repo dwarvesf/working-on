@@ -15,6 +15,7 @@ import (
 	"github.com/gin-gonic/contrib/ginrus"
 	"github.com/gin-gonic/gin"
 	"github.com/nlopes/slack"
+	"github.com/olebedev/config"
 )
 
 type Item struct {
@@ -100,14 +101,39 @@ func addItem(c *gin.Context) {
 		os.Exit(1)
 	}
 
-	s := slack.New(botToken)
 	// <@U024BE7LH|bob>
 	title := "*" + userName + "* is working on: " + text
 
+	postWorkingItem(botToken, channel, title)
+
+	// Parse configuration
+	cfg, err := config.ParseJsonFile("setting.json")
+	// var configurations []Configuration
+	configurations, err := cfg.List("items")
+
+	// Post item to project group
+	for _, config := range configurations {
+		for _, tag := range config.Tags {
+			if strings.Contains(text, tag) {
+				// Post to target channel
+				postWorkingItem(config.Token, config.Channel, title)
+			}
+		}
+	}
+}
+
+func postWorkingItem(token string, channel string, text string) {
+	s := slack.New(token)
 	params := slack.PostMessageParameters{}
 	params.IconURL = "http://i.imgur.com/fLcxkel.png"
 	params.Username = "oshin"
-	s.PostMessage(channel, title, params)
+	s.PostMessage(channel, text, params)
+}
+
+type Configuration struct {
+	Channel string   `json:"channel"`
+	Tags    []string `json:"tags"`
+	Token   string   `json:"token"`
 }
 
 // Post summary to Slack channel
@@ -171,7 +197,7 @@ func postDigest() {
 		}
 
 		for _, item := range items {
-			values = values + " + " + item.Text + "\n\t"
+			values = "\t" + values + " + " + item.Text + "\n"
 		}
 
 		// <@U024BE7LH|bob>
