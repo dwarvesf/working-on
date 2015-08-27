@@ -113,7 +113,7 @@ func addItem(c *gin.Context) {
 		log.Fatalln("Cannot read setting file")
 	}
 
-	err = json.Unmarshal(bytes, configuration)
+	err = json.Unmarshal(bytes, &configuration)
 	if err != nil {
 		log.Fatalln("Cannot parse setting")
 	}
