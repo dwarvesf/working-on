@@ -120,9 +120,12 @@ func addItem(c *gin.Context) {
 
 	// Post item to project group
 	for _, config := range configuration.Items {
-		for _, tag := range config.Tags {
-			if strings.Contains(text, tag) {
 
+		log.Info("Processing item: " + config.Channel)
+		for _, tag := range config.Tags {
+
+			log.Info("Current tag: " + tag)
+			if strings.Contains(text, tag) {
 				log.Info("Hit" + tag)
 
 				// Post to target channel
