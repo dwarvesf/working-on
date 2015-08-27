@@ -7,14 +7,15 @@
 		        "#quickdesk",
 		        "#desk"
 	        ],
-            "token": "cbPo9nqMX5ItjwJ9f8IZtUDx"
+            "token": "gdggX7b0Wj9w5oHgVEMxmOqt"
         },
         {
             "channel": "#general",
             "tags": [
                 "#quickref"
             ],
-            "token": "cbPo9nqMX5ItjwJ9f8IZtUDx"
+            "token": "gdggX7b0Wj9w5oHgVEMxmOqt"
         }
+
     ]
 }
