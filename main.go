@@ -110,28 +110,31 @@ func addItem(c *gin.Context) {
 	// Parse configuration
 	cfg, err := config.ParseJsonFile("setting.json")
 	m, err := cfg.Map("items")
+	r, err := cfg.List("items")
 
 	log.Info(reflect.TypeOf(m))
+	log.Info(reflect.TypeOf(r))
 
 	// Post item to project group
-	// for _, item := range configurations {
+	for _, item := range r {
 
-	// // config, ok := item.(Configuration)
-	// // if ok {
-	// // for _, tag := range config.Tags {
-	// // if strings.Contains(text, tag) {
+		log.Info(reflect.TypeOf(item))
+		config, ok := item.(Configuration)
+		if ok {
+			for _, tag := range config.Tags {
+				if strings.Contains(text, tag) {
 
-	// // log.Info("Hit" + tag)
+					log.Info("Hit" + tag)
 
-	// // // Post to target channel
-	// // postWorkingItem(config.Token, config.Channel, title)
-	// // }
-	// // }
-	// // } else {
-	// // log.Error("Sth went wrong")
-	// // }
+					// Post to target channel
+					postWorkingItem(config.Token, config.Channel, title)
+				}
+			}
+		} else {
+			log.Error("Sth went wrong")
+		}
 
-	// }
+	}
 }
 
 func postWorkingItem(token string, channel string, text string) {
