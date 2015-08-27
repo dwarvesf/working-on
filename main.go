@@ -108,15 +108,17 @@ func addItem(c *gin.Context) {
 
 	// Parse configuration
 	cfg, err := config.ParseJsonFile("setting.json")
-	// var configurations []Configuration
 	configurations, err := cfg.List("items")
 
 	// Post item to project group
-	for _, config := range configurations {
-		for _, tag := range config.Tags {
-			if strings.Contains(text, tag) {
-				// Post to target channel
-				postWorkingItem(config.Token, config.Channel, title)
+	for _, item := range configurations {
+		config, ok := item.(Configuration)
+		if ok {
+			for _, tag := range config.Tags {
+				if strings.Contains(text, "#"+tag) {
+					// Post to target channel
+					postWorkingItem(config.Token, config.Channel, title)
+				}
 			}
 		}
 	}
