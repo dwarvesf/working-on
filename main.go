@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"reflect"
 	"strings"
 	"time"
 
@@ -108,31 +109,29 @@ func addItem(c *gin.Context) {
 
 	// Parse configuration
 	cfg, err := config.ParseJsonFile("setting.json")
-	configurations, err := cfg.List("items")
+	m, err := cfg.Map("items")
 
-	log.Info(configurations.(type))
+	log.Info(reflect.TypeOf(m))
 
 	// Post item to project group
-	for _, item := range configurations {
+	// for _, item := range configurations {
 
-		log.Info(item.(type))
+	// // config, ok := item.(Configuration)
+	// // if ok {
+	// // for _, tag := range config.Tags {
+	// // if strings.Contains(text, tag) {
 
-		// config, ok := item.(Configuration)
-		// if ok {
-		// for _, tag := range config.Tags {
-		// if strings.Contains(text, tag) {
+	// // log.Info("Hit" + tag)
 
-		// log.Info("Hit" + tag)
+	// // // Post to target channel
+	// // postWorkingItem(config.Token, config.Channel, title)
+	// // }
+	// // }
+	// // } else {
+	// // log.Error("Sth went wrong")
+	// // }
 
-		// // Post to target channel
-		// postWorkingItem(config.Token, config.Channel, title)
-		// }
-		// }
-		// } else {
-		// log.Error("Sth went wrong")
-		// }
-
-	}
+	// }
 }
 
 func postWorkingItem(token string, channel string, text string) {
