@@ -15,6 +15,7 @@ import (
 	"github.com/dwarvesf/working-on/db"
 	"github.com/gin-gonic/contrib/ginrus"
 	"github.com/gin-gonic/gin"
+	"github.com/k0kubun/pp"
 	"github.com/nlopes/slack"
 	"github.com/olebedev/config"
 )
@@ -109,18 +110,13 @@ func addItem(c *gin.Context) {
 
 	// Parse configuration
 	cfg, err := config.ParseJsonFile("setting.json")
-	m, err := cfg.Map("items")
-	r, err := cfg.List("items")
-
-	log.Info(reflect.TypeOf(m))
-	log.Info(reflect.TypeOf(r))
+	configurations, err := cfg.List("items")
 
 	// Post item to project group
-	for _, item := range r {
-
-		log.Info(item["channel"])
-
+	for _, item := range configurations {
 		log.Info(reflect.TypeOf(item))
+		pp.Println(item)
+
 		config, ok := item.(Configuration)
 		if ok {
 			for _, tag := range config.Tags {
