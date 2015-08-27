@@ -2,7 +2,6 @@ package main
 
 import (
 	"os"
-	"reflect"
 	"strings"
 	"time"
 
@@ -15,7 +14,6 @@ import (
 	"github.com/dwarvesf/working-on/db"
 	"github.com/gin-gonic/contrib/ginrus"
 	"github.com/gin-gonic/gin"
-	"github.com/k0kubun/pp"
 	"github.com/nlopes/slack"
 	"github.com/olebedev/config"
 )
@@ -114,10 +112,10 @@ func addItem(c *gin.Context) {
 
 	// Post item to project group
 	for _, item := range configurations {
-		log.Info(reflect.TypeOf(item))
-		pp.Println(item)
 
+		var config Configuration
 		config, ok := item.(Configuration)
+
 		if ok {
 			for _, tag := range config.Tags {
 				if strings.Contains(text, tag) {
