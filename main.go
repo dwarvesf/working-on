@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"strings"
 	"time"
@@ -108,7 +109,10 @@ func addItem(c *gin.Context) {
 
 	// Parse configuration
 	cfg, err := config.ParseJsonFile("setting.json")
+	res, err := cfg.String("items.0.channel")
+	log.Info(res)
 	configurations, err := cfg.List("items")
+	fmt.Println(configurations)
 
 	// Post item to project group
 	for _, item := range configurations {
