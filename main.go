@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"os"
 	"strings"
 	"time"
@@ -15,7 +17,6 @@ import (
 	"github.com/gin-gonic/contrib/ginrus"
 	"github.com/gin-gonic/gin"
 	"github.com/nlopes/slack"
-	"github.com/olebedev/config"
 )
 
 type Item struct {
@@ -98,7 +99,6 @@ func addItem(c *gin.Context) {
 
 	if botToken == "" {
 		log.Fatal("No token provided")
-		os.Exit(1)
 	}
 
 	// <@U024BE7LH|bob>
@@ -107,26 +107,28 @@ func addItem(c *gin.Context) {
 	postWorkingItem(botToken, channel, title)
 
 	// Parse configuration
-	cfg, err := config.ParseJsonFile("setting.json")
+	var configuration Configuration
+	bytes, err := ioutil.ReadFile("setting.json")
+	if err != nil {
+		log.Fatalln("Cannot read setting file")
+	}
 
-	configuration, ok := cfg.Root.(Configuration)
+	err = json.Unmarshal(bytes, configuration)
+	if err != nil {
+		log.Fatalln("Cannot parse setting")
+	}
 
 	// Post item to project group
-	if ok {
-		for _, config := range configuration.Items {
+	for _, config := range configuration.Items {
+		for _, tag := range config.Tags {
+			if strings.Contains(text, tag) {
 
-			for _, tag := range config.Tags {
-				if strings.Contains(text, tag) {
+				log.Info("Hit" + tag)
 
-					log.Info("Hit" + tag)
-
-					// Post to target channel
-					postWorkingItem(config.Token, config.Channel, title)
-				}
+				// Post to target channel
+				postWorkingItem(config.Token, config.Channel, title)
 			}
 		}
-	} else {
-		log.Error("Sth went wrong")
 	}
 }
 
