@@ -116,6 +116,8 @@ func addItem(c *gin.Context) {
 
 	// Post item to project group
 	for _, item := range configurations {
+
+		log.Info(item)
 		config, ok := item.(Configuration)
 		if ok {
 			for _, tag := range config.Tags {
@@ -127,7 +129,10 @@ func addItem(c *gin.Context) {
 					postWorkingItem(config.Token, config.Channel, title)
 				}
 			}
+		} else {
+			log.Fatalln("Sth went wrong")
 		}
+
 	}
 }
 
