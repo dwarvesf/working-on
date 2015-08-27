@@ -30,6 +30,11 @@
 			"Rev": "4cc2de6207f4128624cbdd16be30f64966c67c08"
 		},
 		{
+			"ImportPath": "github.com/k0kubun/pp",
+			"Comment": "v2.1.0-8-g36d5366",
+			"Rev": "36d5366f4ec038f9a76dd85c7b29074089bb9b9e"
+		},
+		{
 			"ImportPath": "github.com/manucorporat/sse",
 			"Rev": "c142f0f1baea5cef7f98a8a6c222f6134368c1f5"
 		},
