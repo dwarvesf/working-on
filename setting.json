@@ -2,18 +2,18 @@
     "items":
     [
         {
-            "channel": "general",
+            "channel": "#general",
             "tags": [
-		        "qd",
-		        "quickdesk",
-		        "desk"
+		        "#qd",
+		        "#quickdesk",
+		        "#desk"
 	        ],
             "token": "cbPo9nqMX5ItjwJ9f8IZtUDx"
         },
         {
-            "channel": "general",
+            "channel": "#general",
             "tags": [
-                "quickref"
+                "#quickref"
             ],
             "token": "cbPo9nqMX5ItjwJ9f8IZtUDx"
         }

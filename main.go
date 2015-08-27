@@ -115,7 +115,7 @@ func addItem(c *gin.Context) {
 		config, ok := item.(Configuration)
 		if ok {
 			for _, tag := range config.Tags {
-				if strings.Contains(text, "#"+tag) {
+				if strings.Contains(text, tag) {
 					// Post to target channel
 					postWorkingItem(config.Token, config.Channel, title)
 				}
