@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"strings"
 	"time"
@@ -109,29 +108,29 @@ func addItem(c *gin.Context) {
 
 	// Parse configuration
 	cfg, err := config.ParseJsonFile("setting.json")
-	res, err := cfg.String("items.0.channel")
-	log.Info(res)
 	configurations, err := cfg.List("items")
-	fmt.Println(configurations)
+
+	log.Info(configurations.(type))
 
 	// Post item to project group
 	for _, item := range configurations {
 
-		log.Info(item)
-		config, ok := item.(Configuration)
-		if ok {
-			for _, tag := range config.Tags {
-				if strings.Contains(text, tag) {
+		log.Info(item.(type))
 
-					log.Info("Hit" + tag)
+		// config, ok := item.(Configuration)
+		// if ok {
+		// for _, tag := range config.Tags {
+		// if strings.Contains(text, tag) {
 
-					// Post to target channel
-					postWorkingItem(config.Token, config.Channel, title)
-				}
-			}
-		} else {
-			log.Fatalln("Sth went wrong")
-		}
+		// log.Info("Hit" + tag)
+
+		// // Post to target channel
+		// postWorkingItem(config.Token, config.Channel, title)
+		// }
+		// }
+		// } else {
+		// log.Error("Sth went wrong")
+		// }
 
 	}
 }
