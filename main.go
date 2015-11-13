@@ -45,23 +45,14 @@ func main() {
 
 	// router.LoadHTMLGlob("templates/*.tmpl.html")
 	router.Static("/static", "static")
-	router.POST("/on", addItem)
+	router.POST("/on", on)
+	router.POST("/til", til)
 
 	// Start server
 	router.Run(":" + port)
 }
 
-// Message will be passed to server with '-' prefix via various way
-//	+ Direct message with the bots
-//	+ Use slash command `/working <message>`
-//	+ Use cli `working-on <message>`
-//	+ Might use Chrome plugin
-//	+ ...
-// Token is secondary param to indicate the user
-func addItem(c *gin.Context) {
-
-	// Parse token and message
-	var item Item
+func til(c *gin.Context) {
 
 	text := c.PostForm("text")
 	text = strings.TrimSpace(text)
@@ -73,6 +64,38 @@ func addItem(c *gin.Context) {
 
 	userID := c.PostForm("user_id")
 	userName := c.PostForm("user_name")
+
+	text = text + " #til"
+	addItem(text, userID, userName)
+}
+
+func on(c *gin.Context) {
+
+	text := c.PostForm("text")
+	text = strings.TrimSpace(text)
+
+	if text == "" {
+		log.Fatalln("Message is nil")
+		return
+	}
+
+	userID := c.PostForm("user_id")
+	userName := c.PostForm("user_name")
+
+	addItem(text, userID, userName)
+}
+
+// Message will be passed to server with '-' prefix via various way
+//	+ Direct message with the bots
+//	+ Use slash command `/working <message>`
+//	+ Use cli `working-on <message>`
+//	+ Might use Chrome plugin
+//	+ ...
+// Token is secondary param to indicate the user
+func addItem(text string, userID string, userName string) {
+
+	// Parse token and message
+	var item Item
 
 	item.ID = bson.NewObjectId()
 	item.CreatedAt = time.Now()
