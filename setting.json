@@ -3,10 +3,10 @@
         {
             "channel": "#general",
             "tags": [
-		        "#qd",
-		        "#quickdesk",
-		        "#desk"
-	        ],
+                "#qd",
+                "#quickdesk",
+                "#desk"
+            ],
             "token": "xoxb-9790138547-WAleGES6Trgr5eo0ay9HjYCE"
         },
         {
@@ -15,7 +15,13 @@
                 "#quickref"
             ],
             "token": "xoxb-9790138547-WAleGES6Trgr5eo0ay9HjYCE"
+        },
+        {
+            "channel": "#integration",
+            "tags": [
+                "#classify"
+            ],
+            "token": "xoxb-82600302595-uoG7uDcUsTcrCUMYa32hUnWQ"
         }
-
     ]
 }
