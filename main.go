@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -34,9 +35,31 @@ func main() {
 	digestTime := os.Getenv("DIGEST_TIME")
 	gorelic.InitNewrelicAgent(os.Getenv("NEW_RELIC_LICENSE_KEY"), "working", false)
 
-	// Setup schedule jobs
-	digestJob := postDigest
-	scheduler.Every().Day().At(digestTime).Run(digestJob)
+	digestConfig, err := parseConfig("digest.json")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	// Setup schedule digest jobs
+	for _, i := range digestConfig.Items {
+		// channel := os.Getenv("DIGEST_CHANNEL")
+		// botToken := os.Getenv("BOT_TOKEN")
+
+		var strictTag bool
+		if i.Tags != nil {
+			strictTag = true
+		}
+		digestJob := postDigest(i.Channel, i.Token, i.Tags, strictTag)
+		_, err := scheduler.Every().Day().At(digestTime).Run(digestJob)
+		if err != nil {
+			log.Infoln(err)
+		}
+	}
+
+	settingConfig, err := parseConfig("setting.json")
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	// Prepare router
 	router := gin.New()
@@ -45,44 +68,46 @@ func main() {
 
 	// router.LoadHTMLGlob("templates/*.tmpl.html")
 	router.Static("/static", "static")
-	router.POST("/on", on)
-	router.POST("/til", til)
+	router.POST("/on", on(*settingConfig))
+	router.POST("/til", til(*settingConfig))
 
 	// Start server
 	router.Run(":" + port)
 }
 
-func til(c *gin.Context) {
+func til(config Configuration) func(c *gin.Context) {
+	return func(c *gin.Context) {
+		text := c.PostForm("text")
+		text = strings.TrimSpace(text)
 
-	text := c.PostForm("text")
-	text = strings.TrimSpace(text)
+		if text == "" {
+			log.Fatalln("Message is nil")
+			return
+		}
 
-	if text == "" {
-		log.Fatalln("Message is nil")
-		return
+		userID := c.PostForm("user_id")
+		userName := c.PostForm("user_name")
+
+		text = text + " #til"
+		addItem(text, userID, userName, config)
 	}
-
-	userID := c.PostForm("user_id")
-	userName := c.PostForm("user_name")
-
-	text = text + " #til"
-	addItem(text, userID, userName)
 }
 
-func on(c *gin.Context) {
+func on(config Configuration) func(c *gin.Context) {
+	return func(c *gin.Context) {
+		text := c.PostForm("text")
+		text = strings.TrimSpace(text)
 
-	text := c.PostForm("text")
-	text = strings.TrimSpace(text)
+		if text == "" {
+			log.Fatalln("Message is nil")
+			return
+		}
 
-	if text == "" {
-		log.Fatalln("Message is nil")
-		return
+		userID := c.PostForm("user_id")
+		userName := c.PostForm("user_name")
+
+		addItem(text, userID, userName, config)
 	}
-
-	userID := c.PostForm("user_id")
-	userName := c.PostForm("user_name")
-
-	addItem(text, userID, userName)
 }
 
 // Message will be passed to server with '-' prefix via various way
@@ -92,7 +117,7 @@ func on(c *gin.Context) {
 //	+ Might use Chrome plugin
 //	+ ...
 // Token is secondary param to indicate the user
-func addItem(text string, userID string, userName string) {
+func addItem(text string, userID string, userName string, configuration Configuration) {
 
 	// Parse token and message
 	var item Item
@@ -129,18 +154,6 @@ func addItem(text string, userID string, userName string) {
 
 	postWorkingItem(botToken, channel, title)
 
-	// Parse configuration
-	var configuration Configuration
-	bytes, err := ioutil.ReadFile("setting.json")
-	if err != nil {
-		log.Fatalln("Cannot read setting file")
-	}
-
-	err = json.Unmarshal(bytes, &configuration)
-	if err != nil {
-		log.Fatalln("Cannot parse setting")
-	}
-
 	// Post item to project group
 	for _, config := range configuration.Items {
 		for _, tag := range config.Tags {
@@ -173,94 +186,130 @@ type ConfigurationItem struct {
 	Token   string   `json:"token"`
 }
 
-// Post summary to Slack channel
-func postDigest() {
+func parseConfig(path string) (*Configuration, error) {
+	var configuration Configuration
 
-	channel := os.Getenv("DIGEST_CHANNEL")
-	botToken := os.Getenv("BOT_TOKEN")
-
-	if botToken == "" {
-		log.Fatal("No token provided")
-		os.Exit(1)
-	}
-
-	s := slack.New(botToken)
-	users, err := s.GetUsers()
-
+	// Parse configuration
+	bytes, err := ioutil.ReadFile(path)
 	if err != nil {
-		log.Fatal("Cannot get users")
-		os.Exit(1)
+		return nil, errors.New("Cannot read setting file")
 	}
 
-	ctx, err := db.NewContext()
+	err = json.Unmarshal(bytes, &configuration)
 	if err != nil {
-		panic(err)
+		return nil, errors.New("Cannot parse setting")
 	}
 
-	defer ctx.Close()
+	return &configuration, nil
+}
 
-	log.Info("Preparing data")
-	// If count > 0, it means there is data to show
-	count := 0
-	title := " >> Yesterday I did: "
-	params := slack.PostMessageParameters{}
-	fields := []slack.AttachmentField{}
-
-	yesterday := arrow.Yesterday().UTC()
-	toDate := time.Date(yesterday.Year(), yesterday.Month(), yesterday.Day(), 0, 0, 0, 0, time.UTC)
-
-	// Prepare attachment of done items
-	for _, user := range users {
-
-		if user.IsBot || user.Deleted {
-			continue
-		}
-
-		// log.Info("Process user: " + user.Name + " - " + user.Id)
-
-		// Query done items from Database
-		var values string
-		var items []Item
-
-		err = ctx.C("items").Find(bson.M{"$and": []bson.M{
-			bson.M{"user_id": user.Id},
-			bson.M{"created_at": bson.M{"$gt": toDate}},
-		},
-		}).All(&items)
-
-		if err != nil {
-			log.Fatal("Cannot query done items.")
+// Post summary to Slack channel.
+// Only post to specific channel when tags are met.
+func postDigest(channel, botToken string, tags []string, strictTag bool) func() {
+	return func() {
+		if botToken == "" {
+			log.Fatal("No token provided")
 			os.Exit(1)
 		}
 
-		for _, item := range items {
-			values = "\t" + values + " + " + item.Text + "\n"
+		s := slack.New(botToken)
+		users, err := s.GetUsers()
+
+		if err != nil {
+			log.Fatal("Cannot get users")
+			os.Exit(1)
 		}
 
-		// <@U024BE7LH|bob>
-		if len(items) > 0 {
+		ctx, err := db.NewContext()
+		if err != nil {
+			panic(err)
+		}
 
-			count = count + 1
-			field := slack.AttachmentField{
-				Title: "@" + user.Name,
-				Value: values,
+		defer ctx.Close()
+
+		log.Info("Preparing data")
+		// If count > 0, it means there is data to show
+		count := 0
+		title := " >> Yesterday I did: "
+		params := slack.PostMessageParameters{}
+		fields := []slack.AttachmentField{}
+
+		yesterday := arrow.Yesterday().UTC()
+		toDate := time.Date(yesterday.Year(), yesterday.Month(), yesterday.Day(), 0, 0, 0, 0, time.UTC)
+
+		// Prepare attachment of done items
+		for _, user := range users {
+
+			if user.IsBot || user.Deleted {
+				continue
 			}
 
-			fields = append(fields, field)
+			// log.Info("Process user: " + user.Name + " - " + user.Id)
+
+			// Query done items from Database
+			var values string
+			var items []Item
+
+			err = ctx.C("items").Find(
+				bson.M{
+					"$and": []bson.M{
+						bson.M{"user_id": user.Id},
+						bson.M{"created_at": bson.M{"$gt": toDate}},
+					},
+				}).All(&items)
+
+			if err != nil {
+				log.Fatal("Cannot query done items.")
+				os.Exit(1)
+			}
+
+			for i, item := range items {
+				// delete items which text does not contain tags
+				if strictTag && tags != nil {
+					var containTag bool
+					for _, tag := range tags {
+						if strings.Contains(item.Text, tag) {
+							containTag = true
+							break
+						}
+					}
+
+					// if item's Text doesn't contains any tags then delete it
+					// from the items slice
+					if !containTag {
+						items = append(items[:i], items[i+1:]...)
+					}
+				}
+
+				// construct text format
+				values = "\t" + values + " + " + item.Text + "\n"
+			}
+
+			// <@U024BE7LH|bob>
+			if len(items) > 0 {
+
+				count = count + 1
+				field := slack.AttachmentField{
+					Title: "@" + user.Name,
+					Value: values,
+				}
+
+				fields = append(fields, field)
+			}
 		}
-	}
 
-	params.Attachments = []slack.Attachment{
-		slack.Attachment{
-			Color:  "#7CD197",
-			Fields: fields,
-		},
-	}
+		params.Attachments = []slack.Attachment{
+			slack.Attachment{
+				Color:  "#7CD197",
+				Fields: fields,
+			},
+		}
 
-	params.IconURL = "http://i.imgur.com/fLcxkel.png"
-	params.Username = "oshin"
+		params.IconURL = "http://i.imgur.com/fLcxkel.png"
+		params.Username = "oshin"
 
-	if count > 0 {
-		s.PostMessage(channel, title, params)
+		if count > 0 {
+			s.PostMessage(channel, title, params)
+		}
 	}
 }
