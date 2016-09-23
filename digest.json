@@ -1,0 +1,15 @@
+{
+    "items": [
+        {
+            "channel":"#general",
+            "token": "xoxb-7578669431-QscBUDGFYlMjbaA3LClw9sgN"
+        },
+        {
+            "channel": "#integrations",
+            "tags": [
+                "#classify"
+            ],
+            "token": "xoxb-82600302595-uoG7uDcUsTcrCUMYa32hUnWQ"
+        }
+    ]
+}
