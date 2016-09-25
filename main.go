@@ -253,7 +253,7 @@ func postDigest(channel, botToken string, tags []string, strictTag bool) func() 
 			err = ctx.C("items").Find(
 				bson.M{
 					"$and": []bson.M{
-						bson.M{"user_id": user.Id},
+						bson.M{"user_name": user.Name},
 						bson.M{"created_at": bson.M{"$gt": toDate}},
 					},
 				}).All(&items)
@@ -263,21 +263,22 @@ func postDigest(channel, botToken string, tags []string, strictTag bool) func() 
 				os.Exit(1)
 			}
 
-			for i, item := range items {
+			for _, item := range items {
 				// delete items which text does not contain tags
 				if strictTag && tags != nil {
 					var containTag bool
 					for _, tag := range tags {
-						if strings.Contains(item.Text, tag) {
-							containTag = true
-							break
+						if !strings.Contains(item.Text, tag) {
+							continue
 						}
+						containTag = true
+						break
 					}
 
-					// if item's Text doesn't contains any tags then delete it
-					// from the items slice
+					// if item's Text doesn't contains any tags then don't
+					// add it to the digest message (values)
 					if !containTag {
-						items = append(items[:i], items[i+1:]...)
+						continue
 					}
 				}
 
