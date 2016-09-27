@@ -263,7 +263,7 @@ func postDigest(channel, botToken string, tags []string, strictTag bool) func() 
 				os.Exit(1)
 			}
 
-			for _, item := range items {
+			for i, item := range items {
 				// delete items which text does not contain tags
 				if strictTag && tags != nil {
 					var containTag bool
@@ -276,8 +276,14 @@ func postDigest(channel, botToken string, tags []string, strictTag bool) func() 
 					}
 
 					// if item's Text doesn't contains any tags then don't
-					// add it to the digest message (values)
+					// add it to the digest message (values) and remove it
+					// from items slice.
 					if !containTag {
+						if len(items) == 1 {
+							items = nil
+						} else {
+							items = append(items[:i], items[i+1:]...)
+						}
 						continue
 					}
 				}
