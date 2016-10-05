@@ -17,11 +17,18 @@
             "token": "xoxb-9790138547-WAleGES6Trgr5eo0ay9HjYCE"
         },
         {
-            "channel": "#integrations",
+            "channel": "#working",
             "tags": [
                 "#classify"
             ],
             "token": "xoxb-82600302595-uoG7uDcUsTcrCUMYa32hUnWQ"
+        },
+        {
+            "channel": "#working",
+            "tags": [
+                "#clipchute"
+            ],
+            "token": "xoxb-95741028870-aRoUAm5QKVmv8qutMAJa0i5x"
         }
     ]
 }

@@ -5,11 +5,18 @@
             "token": "xoxb-7578669431-QscBUDGFYlMjbaA3LClw9sgN"
         },
         {
-            "channel": "#integrations",
+            "channel": "#general",
             "tags": [
                 "#classify"
             ],
             "token": "xoxb-82600302595-uoG7uDcUsTcrCUMYa32hUnWQ"
+        },
+        {
+            "channel": "#general",
+            "tags": [
+                "#clipchute"
+            ],
+            "token": "xoxb-95741028870-aRoUAm5QKVmv8qutMAJa0i5x"
         }
     ]
 }
