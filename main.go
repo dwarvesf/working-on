@@ -43,9 +43,6 @@ func main() {
 
 	// Setup schedule digest jobs
 	for _, i := range digestConfig.Items {
-		// channel := os.Getenv("DIGEST_CHANNEL")
-		// botToken := os.Getenv("BOT_TOKEN")
-
 		digestJob := postDigest(i.Channel, i.Token, i.Tags)
 		_, err := scheduler.Every().Day().At(digestTime).Run(digestJob)
 		if err != nil {
@@ -127,7 +124,7 @@ func addItem(text string, userID string, userName string, configuration Configur
 
 	ctx, err := db.NewContext()
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	defer ctx.Close()
@@ -219,7 +216,7 @@ func postDigest(channel, botToken string, tags []string) func() {
 
 		ctx, err := db.NewContext()
 		if err != nil {
-			panic(err)
+			log.Fatal(err)
 		}
 
 		defer ctx.Close()
@@ -241,7 +238,7 @@ func postDigest(channel, botToken string, tags []string) func() {
 				continue
 			}
 
-			log.Info("Process user: %s - %s", user.Name, user.Id)
+			log.Infof("Process user: %s - %s", user.Name, user.Id)
 
 			// Query done items from Database
 			var values string
@@ -261,7 +258,7 @@ func postDigest(channel, botToken string, tags []string) func() {
 			}
 
 			for i, item := range items {
-				log.Info("User: %s, item: %s", user.Name, item.Text)
+				log.Infof("User: %s, item: %s", user.Name, item.Text)
 
 				// delete items which text does not contain tags
 				if tags != nil {

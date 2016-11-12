@@ -30,6 +30,10 @@ func NewContext() (*Context, error) {
 	dbURL := os.Getenv("MONGOLAB_URI")
 	AuthDatabase := os.Getenv("DB_NAME")
 	session, err := mgo.Dial(dbURL)
+	if err != nil {
+		return nil, err
+	}
+
 	ctx := &Context{
 		Database: session.Clone().DB(AuthDatabase),
 	}
