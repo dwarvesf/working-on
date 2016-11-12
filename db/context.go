@@ -11,7 +11,6 @@ type Context struct {
 }
 
 func NewContext() (*Context, error) {
-
 	dbURL := os.Getenv("MONGOLAB_URI")
 	AuthDatabase := os.Getenv("DB_NAME")
 	session, err := mgo.Dial(dbURL)
@@ -23,14 +22,14 @@ func NewContext() (*Context, error) {
 		Database: session.Clone().DB(AuthDatabase),
 	}
 
-	return ctx, err
+	return ctx, nil
 }
 
 func (c *Context) Close() {
 	c.Database.Session.Close()
 }
 
-//C is a convenience function to return a collection from the context database.
+// C is a convenience function to return a collection from the context database.
 func (c *Context) C(name string) *mgo.Collection {
 	return c.Database.C(name)
 }
