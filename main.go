@@ -3,21 +3,22 @@ package main
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"strings"
 	"time"
 
-	"gopkg.in/mgo.v2/bson"
-
 	log "github.com/Sirupsen/logrus"
-	"github.com/bmuller/arrow/lib"
-	"github.com/brandfolder/gin-gorelic"
+	arrow "github.com/bmuller/arrow/lib"
+	gorelic "github.com/brandfolder/gin-gorelic"
 	"github.com/carlescere/scheduler"
-	"github.com/dwarvesf/working-on/db"
 	"github.com/gin-gonic/contrib/ginrus"
 	"github.com/gin-gonic/gin"
 	"github.com/nlopes/slack"
+	"gopkg.in/mgo.v2/bson"
+
+	"github.com/dwarvesf/working-on/db"
 )
 
 type Item struct {
@@ -45,11 +46,7 @@ func main() {
 		// channel := os.Getenv("DIGEST_CHANNEL")
 		// botToken := os.Getenv("BOT_TOKEN")
 
-		var strictTag bool
-		if i.Tags != nil {
-			strictTag = true
-		}
-		digestJob := postDigest(i.Channel, i.Token, i.Tags, strictTag)
+		digestJob := postDigest(i.Channel, i.Token, i.Tags)
 		_, err := scheduler.Every().Day().At(digestTime).Run(digestJob)
 		if err != nil {
 			log.Infoln(err)
@@ -150,7 +147,7 @@ func addItem(text string, userID string, userName string, configuration Configur
 	}
 
 	// <@U024BE7LH|bob>
-	title := "*" + userName + "* is working on: " + text
+	title := fmt.Sprintf("*%s* is working on: %s", userName, text)
 
 	postWorkingItem(botToken, channel, title)
 
@@ -158,8 +155,8 @@ func addItem(text string, userID string, userName string, configuration Configur
 	for _, config := range configuration.Items {
 		for _, tag := range config.Tags {
 			if strings.Contains(text, tag) {
-				log.Info("Hit" + tag)
-				log.Info("Token: " + config.Token)
+				log.Infof("Hit %s", tag)
+				log.Infof("Token: %s", config.Token)
 
 				// Post to target channel
 				postWorkingItem(config.Token, config.Channel, title)
@@ -205,7 +202,7 @@ func parseConfig(path string) (*Configuration, error) {
 
 // Post summary to Slack channel.
 // Only post to specific channel when tags are met.
-func postDigest(channel, botToken string, tags []string, strictTag bool) func() {
+func postDigest(channel, botToken string, tags []string) func() {
 	return func() {
 		if botToken == "" {
 			log.Fatal("No token provided")
@@ -244,7 +241,7 @@ func postDigest(channel, botToken string, tags []string, strictTag bool) func() 
 				continue
 			}
 
-			// log.Info("Process user: " + user.Name + " - " + user.Id)
+			log.Info("Process user: %s - %s", user.Name, user.Id)
 
 			// Query done items from Database
 			var values string
@@ -264,8 +261,11 @@ func postDigest(channel, botToken string, tags []string, strictTag bool) func() 
 			}
 
 			for i, item := range items {
+				log.Info("User: %s, item: %s", user.Name, item.Text)
+
 				// delete items which text does not contain tags
-				if strictTag && tags != nil {
+				if tags != nil {
+					// check if item contains any tags
 					var containTag bool
 					for _, tag := range tags {
 						if !strings.Contains(item.Text, tag) {
@@ -289,7 +289,8 @@ func postDigest(channel, botToken string, tags []string, strictTag bool) func() 
 				}
 
 				// construct text format
-				values = "\t" + values + " + " + item.Text + "\n"
+				values = fmt.Sprintf("\t %s + %s\n", values, item.Text)
+				log.Infof("Result: %s", values)
 			}
 
 			// <@U024BE7LH|bob>
@@ -297,7 +298,7 @@ func postDigest(channel, botToken string, tags []string, strictTag bool) func() 
 
 				count = count + 1
 				field := slack.AttachmentField{
-					Title: "@" + user.Name,
+					Title: fmt.Sprintf("@%s", user.Name),
 					Value: values,
 				}
 
