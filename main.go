@@ -238,10 +238,10 @@ func postDigest(channel, botToken string, tags []string) func() {
 				continue
 			}
 
-			log.Infof("Process user: %s - %s", user.Name, user.Id)
+			// log.Infof("Process user: %s - %s", user.Name, user.Id)
 
 			// Query done items from Database
-			var values string
+			var values []string
 			var items []Item
 
 			err = ctx.C("items").Find(
@@ -257,8 +257,8 @@ func postDigest(channel, botToken string, tags []string) func() {
 				os.Exit(1)
 			}
 
-			for i, item := range items {
-				log.Infof("User: %s, item: %s", user.Name, item.Text)
+			for _, item := range items {
+				log.Infof("User: %s, item: %s, tags: %+v", user.Name, item.Text, tags)
 
 				// delete items which text does not contain tags
 				if tags != nil {
@@ -272,31 +272,23 @@ func postDigest(channel, botToken string, tags []string) func() {
 						break
 					}
 
-					// if item's Text doesn't contains any tags then don't
-					// add it to the digest message (values) and remove it
-					// from items slice.
+					// if item.Text doesn't contains any tags then don't
+					// add it to the digest message (values)
 					if !containTag {
-						if len(items) == 1 {
-							items = nil
-						} else {
-							items = append(items[:i], items[i+1:]...)
-						}
 						continue
 					}
 				}
 
 				// construct text format
-				values = fmt.Sprintf("\t %s + %s\n", values, item.Text)
-				log.Infof("Result: %s", values)
+				values = append(values, fmt.Sprintf("+ %s", item.Text))
 			}
 
 			// <@U024BE7LH|bob>
-			if len(items) > 0 {
-
-				count = count + 1
+			if len(values) > 0 {
+				count++
 				field := slack.AttachmentField{
 					Title: fmt.Sprintf("@%s", user.Name),
-					Value: values,
+					Value: strings.Join(values, "\n"),
 				}
 
 				fields = append(fields, field)
