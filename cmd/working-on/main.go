@@ -161,7 +161,7 @@ func addItem(text string, userID string, userName string, configuration Configur
 	}
 
 	// <@U024BE7LH|bob>: format text to match Slack format
-	userName = fmt.Sprintf("@<%s|%s>", userID, userName)
+	userName = fmt.Sprintf("<@%s|%s>", userID, userName)
 	title := fmt.Sprintf(format, userName, text)
 
 	postItem(botToken, channel, title)
@@ -305,7 +305,7 @@ func postDigest(channel, botToken string, tags []string) func() {
 			if len(values) > 0 {
 				count++
 				field := slack.AttachmentField{
-					Title: fmt.Sprintf("@<%s|%s>", user.Id, user.Name),
+					Title: fmt.Sprintf("<@%s|%s>", user.Id, user.Name),
 					Value: strings.Join(values, "\n"),
 				}
 
