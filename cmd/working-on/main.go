@@ -43,7 +43,7 @@ func main() {
 
 	// Setup schedule digest jobs
 	for _, i := range digestConfig.Items {
-		digestJob := postDigest(i.Channel, i.Token, i.Tags)
+		digestJob := postDigest(i.Channel, os.Getenv(i.Token), i.Tags)
 		_, err := scheduler.Every().Day().At(digestTime).Run(digestJob)
 		if err != nil {
 			log.Infoln(err)

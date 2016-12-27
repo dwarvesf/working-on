@@ -26,5 +26,3 @@ _testmain.go
 gin-bin
 tags
 /vendor/
-
-digest.json
