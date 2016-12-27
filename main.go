@@ -237,7 +237,7 @@ func remindDailyScrum() {
 	params.IconURL = "http://i.imgur.com/fLcxkel.png"
 	params.Username = "oshin"
 
-	text := "Đến giờ daily scrum rồi mấy bé <!here|here> " + url
+	text := "Đến giờ daily scrum rồi mấy bé <!here|here> " + url + " :4head:"
 	channel := "#random"
 
 	s.PostMessage(channel, text, params)
