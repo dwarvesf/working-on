@@ -1,22 +1,6 @@
 {
     "items": [
         {
-            "channel": "#general",
-            "tags": [
-                "#qd",
-                "#quickdesk",
-                "#desk"
-            ],
-            "token": "xoxb-9790138547-WAleGES6Trgr5eo0ay9HjYCE"
-        },
-        {
-            "channel": "#general",
-            "tags": [
-                "#quickref"
-            ],
-            "token": "xoxb-9790138547-WAleGES6Trgr5eo0ay9HjYCE"
-        },
-        {
             "channel": "#working",
             "tags": [
                 "#classify"

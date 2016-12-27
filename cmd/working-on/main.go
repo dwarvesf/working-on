@@ -72,6 +72,9 @@ func main() {
 
 func done(config Configuration) func(c *gin.Context) {
 	return func(c *gin.Context) {
+
+		log.Infoln("Hello World from Dwarves Foundation")
+
 		text := c.PostForm("text")
 		text = strings.TrimSpace(text)
 
