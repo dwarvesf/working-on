@@ -69,6 +69,23 @@ func main() {
 	router.Run(":" + port)
 }
 
+func done(config Configuration) func(c *gin.Context) {
+	return func(c *gin.Context) {
+		text := c.PostForm("text")
+		text = strings.TrimSpace(text)
+
+		if text == "" {
+			log.Fatalln("Message is nil")
+			return
+		}
+
+		userID := c.PostForm("user_id")
+		userName := c.PostForm("user_name")
+
+		addItem(text, userID, userName, config, ":cantboiroi: *%s* has *done*: %s")
+	}
+}
+
 func til(config Configuration) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		text := c.PostForm("text")
@@ -82,8 +99,7 @@ func til(config Configuration) func(c *gin.Context) {
 		userID := c.PostForm("user_id")
 		userName := c.PostForm("user_name")
 
-		text = text + " #til"
-		addItem(text, userID, userName, config)
+		addItem(text, userID, userName, config, "*%s* #til - Today I learned: %s :adore:")
 	}
 }
 
@@ -100,7 +116,7 @@ func on(config Configuration) func(c *gin.Context) {
 		userID := c.PostForm("user_id")
 		userName := c.PostForm("user_name")
 
-		addItem(text, userID, userName, config)
+		addItem(text, userID, userName, config, "*%s* is *working* on: %s")
 	}
 }
 
@@ -111,7 +127,7 @@ func on(config Configuration) func(c *gin.Context) {
 //	+ Might use Chrome plugin
 //	+ ...
 // Token is secondary param to indicate the user
-func addItem(text string, userID string, userName string, configuration Configuration) {
+func addItem(text string, userID string, userName string, configuration Configuration, format string) {
 
 	// Parse token and message
 	var item Item
@@ -143,10 +159,11 @@ func addItem(text string, userID string, userName string, configuration Configur
 		log.Fatal("No token provided")
 	}
 
-	// <@U024BE7LH|bob>
-	title := fmt.Sprintf("*%s* is working on: %s", userName, text)
+	// <@U024BE7LH|bob>: format text to match Slack format
+	userName = fmt.Sprintf("@<%s|%s>", userID, userName)
+	title := fmt.Sprintf(format, userName, text)
 
-	postWorkingItem(botToken, channel, title)
+	postItem(botToken, channel, title)
 
 	// Post item to project group
 	for _, config := range configuration.Items {
@@ -156,13 +173,13 @@ func addItem(text string, userID string, userName string, configuration Configur
 				log.Infof("Token: %s", config.Token)
 
 				// Post to target channel
-				postWorkingItem(config.Token, config.Channel, title)
+				postItem(config.Token, config.Channel, title)
 			}
 		}
 	}
 }
 
-func postWorkingItem(token string, channel string, text string) {
+func postItem(token string, channel string, text string) {
 	s := slack.New(token)
 	params := slack.PostMessageParameters{}
 	params.IconURL = "http://i.imgur.com/fLcxkel.png"
@@ -287,7 +304,7 @@ func postDigest(channel, botToken string, tags []string) func() {
 			if len(values) > 0 {
 				count++
 				field := slack.AttachmentField{
-					Title: fmt.Sprintf("@%s", user.Name),
+					Title: fmt.Sprintf("@<%s|%s>", user.Id, user.Name),
 					Value: strings.Join(values, "\n"),
 				}
 

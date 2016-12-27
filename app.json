@@ -27,7 +27,7 @@
 	    },
 	    "DIGEST_TIME": {
 	    	"description": "Time to post the team digest",
-	    	"value": "02:30"	
+	    	"value": "02:30"
 	    },
 	    "DIGEST_CHANNEL": {
 	    	"description": "Channel to post digest message",

@@ -12,21 +12,6 @@ type Context struct {
 
 func NewContext() (*Context, error) {
 
-	// AuthDatabase := os.Getenv("DB_NAME")
-	// AuthUserName := os.Getenv("DB_USER")
-	// AuthPassword := os.Getenv("DB_PASS")
-	// MongoDBHosts := os.Getenv("DB_HOST")
-
-	// dialInfo := &mgo.DialInfo{
-	// Addrs:    []string{MongoDBHosts},
-	// Timeout:  60 * time.Second,
-	// Database: AuthDatabase,
-	// Username: AuthUserName,
-	// Password: AuthPassword,
-	// }
-
-	// session, err := mgo.DialWithInfo(dialInfo)
-
 	dbURL := os.Getenv("MONGOLAB_URI")
 	AuthDatabase := os.Getenv("DB_NAME")
 	session, err := mgo.Dial(dbURL)
