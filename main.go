@@ -270,12 +270,13 @@ func postDigest(channel, botToken string, tags []string) func() {
 		log.Info("Preparing data")
 		// If count > 0, it means there is data to show
 		count := 0
-		title := " >> Yesterday I did: "
 		params := slack.PostMessageParameters{}
 		fields := []slack.AttachmentField{}
 
 		yesterday := arrow.Yesterday().UTC()
 		toDate := time.Date(yesterday.Year(), yesterday.Month(), yesterday.Day(), 0, 0, 0, 0, time.UTC)
+
+		title := fmt.Sprintf(" :rocket::rocket: >> Team daily digest for *%s*", arrow.Yesterday().CFormat("%Y-%m-%d"))
 
 		// Prepare attachment of done items
 		for _, user := range users {
