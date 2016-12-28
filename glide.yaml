@@ -1,0 +1,19 @@
+package: github.com/dwarvesf/working
+import:
+- package: github.com/Sirupsen/logrus
+- package: github.com/bmuller/arrow
+  subpackages:
+  - lib
+- package: github.com/brandfolder/gin-gorelic
+- package: github.com/carlescere/scheduler
+- package: github.com/dwarvesf/working-on
+  subpackages:
+  - db
+- package: github.com/gin-gonic/contrib
+  subpackages:
+  - ginrus
+- package: github.com/gin-gonic/gin
+- package: github.com/nlopes/slack
+- package: gopkg.in/mgo.v2
+  subpackages:
+  - bson

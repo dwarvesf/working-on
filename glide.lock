@@ -1,0 +1,56 @@
+hash: d819da482888246b388203fb506a15657a882c821d598e03d996511ab587d726
+updated: 2016-12-29T00:59:20.094232431+07:00
+imports:
+- name: github.com/bmuller/arrow
+  version: 57b28416c629f234bd2291d3ba7b19b9a064fd37
+  subpackages:
+  - lib
+- name: github.com/brandfolder/gin-gorelic
+  version: b3200fd6d4c7c434fd4d4d7ecb39a3c43aa8253c
+- name: github.com/carlescere/scheduler
+  version: 5e2cc370dae40237c2a08b9181d4c84faf4150e9
+- name: github.com/dwarvesf/working-on
+  version: a0e2932de2f251a45489812728f329d3a9ceeba9
+  subpackages:
+  - db
+- name: github.com/gin-gonic/contrib
+  version: 7b9bbbaec78850441ed357ac702e474b26c08f9b
+  subpackages:
+  - ginrus
+- name: github.com/gin-gonic/gin
+  version: 4cc2de6207f4128624cbdd16be30f64966c67c08
+  subpackages:
+  - binding
+  - render
+- name: github.com/manucorporat/sse
+  version: c142f0f1baea5cef7f98a8a6c222f6134368c1f5
+- name: github.com/mattn/go-isatty
+  version: 66b8e73f3f5cda9f96b69efd03dd3d7fc4a5cdb8
+- name: github.com/nlopes/slack
+  version: e595e9d8590a04ff76407e4e7d1791d25b095c66
+- name: github.com/Sirupsen/logrus
+  version: d26492970760ca5d33129d2d799e34be5c4782eb
+- name: github.com/yvasiyarov/go-metrics
+  version: c25f46c4b94079672242ec48a545e7ca9ebe3aec
+- name: github.com/yvasiyarov/gorelic
+  version: ae09aa139a2b7f638e2412baceaceebd41eff115
+- name: github.com/yvasiyarov/newrelic_platform_go
+  version: 13d5af9721f4455a501db543c93827447089bab3
+- name: golang.org/x/net
+  version: a8c61998a557a37435f719980da368469c10bfed
+  subpackages:
+  - context
+  - websocket
+- name: golang.org/x/sys
+  version: 8f0908ab3b2457e2e15403d3697c9ef5cb4b57a9
+  subpackages:
+  - unix
+- name: gopkg.in/bluesuncorp/validator.v5
+  version: d8e0c4d93696f467eedc43f7f954b48eb6fe6ba8
+- name: gopkg.in/mgo.v2
+  version: c6a7dce14133ccac2dcac3793f1d6e2ef048503a
+  subpackages:
+  - bson
+  - internal/scram
+  - sasl
+testImports: []
