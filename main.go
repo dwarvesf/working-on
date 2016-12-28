@@ -223,6 +223,12 @@ func parseConfig(path string) (*Configuration, error) {
 // Remind daily scrum by posting message to Slack
 func remindDailyScrum() {
 
+	today := arrow.Now().Weekday()
+	if today == time.Sunday || today == time.Saturday {
+		log.Infoln("It's weekend and people goes party!")
+		return
+	}
+
 	botToken := os.Getenv("BOT_TOKEN")
 	url := os.Getenv("DAILYSCRUM_URL")
 
