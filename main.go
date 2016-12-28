@@ -276,7 +276,7 @@ func postDigest(channel, botToken string, tags []string) func() {
 		yesterday := arrow.Yesterday().UTC()
 		toDate := time.Date(yesterday.Year(), yesterday.Month(), yesterday.Day(), 0, 0, 0, 0, time.UTC)
 
-		title := fmt.Sprintf(" :rocket::rocket: >> Team daily digest for *%s*", arrow.Yesterday().CFormat("%Y-%m-%d"))
+		title := fmt.Sprintf(" :rocket: >> Team daily digest for *%s* :rocket: <!channel>", arrow.Yesterday().CFormat("%Y-%m-%d"))
 
 		// Prepare attachment of done items
 		for _, user := range users {
@@ -334,7 +334,8 @@ func postDigest(channel, botToken string, tags []string) func() {
 			if len(values) > 0 {
 				count++
 				field := slack.AttachmentField{
-					Title: fmt.Sprintf("<@%s|%s>", user.ID, user.Name),
+					// Title: fmt.Sprintf("<@%s|%s>", user.ID, user.Name),
+					Title: fmt.Sprintf("%s", user.Name),
 					Value: strings.Join(values, "\n"),
 				}
 
@@ -344,8 +345,10 @@ func postDigest(channel, botToken string, tags []string) func() {
 
 		params.Attachments = []slack.Attachment{
 			slack.Attachment{
-				Color:  "#7CD197",
-				Fields: fields,
+				Color:      "#7CD197",
+				Fields:     fields,
+				Footer:     "Oshin Bot",
+				FooterIcon: "http://i.imgur.com/fLcxkel.png",
 			},
 		}
 
