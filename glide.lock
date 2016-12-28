@@ -1,5 +1,5 @@
-hash: 202e840ac61a9dd24f0b45186263dfe096b6a6ed63a8f5417f0837e54e184d51
-updated: 2016-12-29T01:32:07.890099219+07:00
+hash: 67b93f1ca72f187c5a1dac9ecf0bc896c85c9eae3921a8ce20158f698a2d63b0
+updated: 2016-12-29T01:41:50.456821307+07:00
 imports:
 - name: github.com/bmuller/arrow
   version: 57b28416c629f234bd2291d3ba7b19b9a064fd37
@@ -36,15 +36,11 @@ imports:
   version: ae09aa139a2b7f638e2412baceaceebd41eff115
 - name: github.com/yvasiyarov/newrelic_platform_go
   version: 9c099fbc30e90de5bb5c5f94aa5fd08f2daeaacd
-  repo: git@github.com:yvasiyarov/newrelic_platform_go.git
-  vcs: git
 - name: golang.org/x/net
   version: f315505cf3349909cdf013ea56690da34e96a451
   subpackages:
   - context
   - websocket
-- name: golang.org/x/net/context
-  version: f315505cf3349909cdf013ea56690da34e96a451
 - name: golang.org/x/sys
   version: 8f0908ab3b2457e2e15403d3697c9ef5cb4b57a9
   subpackages:
