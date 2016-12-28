@@ -1,5 +1,7 @@
 package: github.com/dwarvesf/working-on
 import:
+- package: github.com/yvasiyarov/newrelic_platform_go
+  version: master
 - package: github.com/Sirupsen/logrus
   version: v0.11.0
 - package: github.com/bmuller/arrow
@@ -21,7 +23,3 @@ import:
 - package: gopkg.in/mgo.v2
   subpackages:
   - bson
-- package: github.com/yvasiyarov/newrelic_platform_go
-  vcs: git
-  version: master
-  repo: git@github.com:yvasiyarov/newrelic_platform_go.git
