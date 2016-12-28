@@ -1,5 +1,5 @@
-hash: d819da482888246b388203fb506a15657a882c821d598e03d996511ab587d726
-updated: 2016-12-29T00:59:20.094232431+07:00
+hash: 202e840ac61a9dd24f0b45186263dfe096b6a6ed63a8f5417f0837e54e184d51
+updated: 2016-12-29T01:32:07.890099219+07:00
 imports:
 - name: github.com/bmuller/arrow
   version: 57b28416c629f234bd2291d3ba7b19b9a064fd37
@@ -8,22 +8,22 @@ imports:
 - name: github.com/brandfolder/gin-gorelic
   version: b3200fd6d4c7c434fd4d4d7ecb39a3c43aa8253c
 - name: github.com/carlescere/scheduler
-  version: 5e2cc370dae40237c2a08b9181d4c84faf4150e9
-- name: github.com/dwarvesf/working-on
-  version: a0e2932de2f251a45489812728f329d3a9ceeba9
-  subpackages:
-  - db
+  version: ddcf6a6be3e8bd4b480f96031d9e1f3abecf2767
 - name: github.com/gin-gonic/contrib
   version: 7b9bbbaec78850441ed357ac702e474b26c08f9b
   subpackages:
   - ginrus
 - name: github.com/gin-gonic/gin
-  version: 4cc2de6207f4128624cbdd16be30f64966c67c08
+  version: e2212d40c62a98b388a5eb48ecbdcf88534688ba
   subpackages:
   - binding
   - render
+- name: github.com/golang/protobuf
+  version: 2402d76f3d41f928c7902a765dfc872356dd3aad
+  subpackages:
+  - proto
 - name: github.com/manucorporat/sse
-  version: c142f0f1baea5cef7f98a8a6c222f6134368c1f5
+  version: ee05b128a739a0fb76c7ebd3ae4810c1de808d6d
 - name: github.com/mattn/go-isatty
   version: 66b8e73f3f5cda9f96b69efd03dd3d7fc4a5cdb8
 - name: github.com/nlopes/slack
@@ -35,22 +35,28 @@ imports:
 - name: github.com/yvasiyarov/gorelic
   version: ae09aa139a2b7f638e2412baceaceebd41eff115
 - name: github.com/yvasiyarov/newrelic_platform_go
-  version: 13d5af9721f4455a501db543c93827447089bab3
+  version: 9c099fbc30e90de5bb5c5f94aa5fd08f2daeaacd
+  repo: git@github.com:yvasiyarov/newrelic_platform_go.git
+  vcs: git
 - name: golang.org/x/net
-  version: a8c61998a557a37435f719980da368469c10bfed
+  version: f315505cf3349909cdf013ea56690da34e96a451
   subpackages:
   - context
   - websocket
+- name: golang.org/x/net/context
+  version: f315505cf3349909cdf013ea56690da34e96a451
 - name: golang.org/x/sys
   version: 8f0908ab3b2457e2e15403d3697c9ef5cb4b57a9
   subpackages:
   - unix
-- name: gopkg.in/bluesuncorp/validator.v5
-  version: d8e0c4d93696f467eedc43f7f954b48eb6fe6ba8
+- name: gopkg.in/go-playground/validator.v8
+  version: c193cecd124b5cc722d7ee5538e945bdb3348435
 - name: gopkg.in/mgo.v2
   version: c6a7dce14133ccac2dcac3793f1d6e2ef048503a
   subpackages:
   - bson
   - internal/scram
   - sasl
+- name: gopkg.in/yaml.v2
+  version: c1cd2254a6dd314c9d73c338c12688c9325d85c6
 testImports: []

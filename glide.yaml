@@ -1,11 +1,13 @@
-package: github.com/dwarvesf/working
+package: github.com/dwarvesf/working-on
 import:
 - package: github.com/Sirupsen/logrus
+  version: v0.11.0
 - package: github.com/bmuller/arrow
   subpackages:
   - lib
 - package: github.com/brandfolder/gin-gorelic
 - package: github.com/carlescere/scheduler
+  version: "0.1"
 - package: github.com/dwarvesf/working-on
   subpackages:
   - db
@@ -13,7 +15,13 @@ import:
   subpackages:
   - ginrus
 - package: github.com/gin-gonic/gin
+  version: v1.1.4
 - package: github.com/nlopes/slack
+  version: master
 - package: gopkg.in/mgo.v2
   subpackages:
   - bson
+- package: github.com/yvasiyarov/newrelic_platform_go
+  vcs: git
+  version: master
+  repo: git@github.com:yvasiyarov/newrelic_platform_go.git

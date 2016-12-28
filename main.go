@@ -334,7 +334,7 @@ func postDigest(channel, botToken string, tags []string) func() {
 			if len(values) > 0 {
 				count++
 				field := slack.AttachmentField{
-					Title: fmt.Sprintf("<@%s|%s>", user.Id, user.Name),
+					Title: fmt.Sprintf("<@%s|%s>", user.ID, user.Name),
 					Value: strings.Join(values, "\n"),
 				}
 
